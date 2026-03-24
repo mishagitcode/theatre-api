@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import serializers
 from theatre.models import (
     Genre,
@@ -146,10 +147,11 @@ class ReservationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         tickets_data = validated_data.pop("tickets")
         user = self.context["request"].user
-        reservation = Reservation.objects.create(user=user)
 
-        for ticket_data in tickets_data:
-            Ticket.objects.create(reservation=reservation, **ticket_data)
+        with transaction.atomic():
+            reservation = Reservation.objects.create(user=user)
+            for ticket_data in tickets_data:
+                Ticket.objects.create(reservation=reservation, **ticket_data)
 
         return reservation
 
