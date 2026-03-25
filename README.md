@@ -2,145 +2,83 @@
 
 ---
 
-**Table of Contents**
+## Contents
+
 1. [Project Overview](#project-overview)
-2. [Project Structure](#project-structure)
-3. [Database Description](#database-description)
-4. [Application Description](#application-description)
-5. [How to Run the Project](#how-to-run-the-project)
-6. [Technologies](#technologies)
+2. [Features](#features)
+3. [Project Structure](#project-structure)
+4. [API Endpoints](#api-endpoints)
+5. [Run with Docker](#run-with-docker)
+6. [Run Locally](#run-locally)
+7. [Testing](#testing)
+8. [Technologies](#technologies)
 
 ---
 
 ## Project Overview
 
-Theatre API is a Django REST Framework project for managing a theatre catalog and ticket reservations. It provides endpoints for genres, actors, plays, theatre halls, performances, reservations, and tickets.
+Theatre API is a Django REST Framework backend for managing a theatre catalog and ticket reservations. It exposes public read endpoints for catalogue data, admin-only write endpoints for theatre management, and authenticated endpoints for booking seats.
 
-The workflow includes:
-1. Browsing theatre catalog data through public read endpoints
-2. Managing theatre content through admin-only write operations
-3. Creating JWT tokens for authenticated requests
-4. Reserving seats for performances through user-specific reservation endpoints
-5. Exploring the API through generated Swagger, ReDoc, and OpenAPI schema pages
+The project includes:
+
+- JWT authentication with refresh tokens
+- Search, ordering, and filtering on catalogue endpoints
+- Reservation creation with nested tickets
+- Auto-generated Swagger, ReDoc, and OpenAPI schema
+- Docker support for running the app in a container
+
+---
+
+## Features
+
+- Public catalogue browsing for genres, actors, plays, theatre halls, and performances
+- Admin-only create, update, and delete operations for theatre content
+- User-specific reservations so each user sees only their own bookings
+- Seat validation and unique seat reservation per performance
+- Performance availability details, including taken places and free tickets
+- Built-in throttling for anonymous and authenticated requests
+- Generated schema file in `schema.yaml`
+
+---
 
 ## Project Structure
 
 ```text
 theatre-api/
-|-- config/                           # Django project configuration
-|   |-- settings.py                   # Project, DRF, JWT, and schema settings
-|   |-- urls.py                       # Root URLs, docs, and auth endpoints
-|   |-- asgi.py                       # ASGI entrypoint
-|   |-- wsgi.py                       # WSGI entrypoint
+|-- config/                    # Django project configuration
+|   |-- settings.py            # Django, DRF, JWT, schema, and env settings
+|   |-- urls.py                # Root routes, docs, and auth endpoints
+|   |-- asgi.py
+|   |-- wsgi.py
 |   `-- __init__.py
-|-- theatre/                          # Main application
-|   |-- fixtures/
-|   |   `-- data.json                 # Sample seed data
-|   |-- migrations/                   # Database migrations
-|   |-- admin.py                      # Django admin configuration
-|   |-- models.py                     # Genre, Actor, Play, Hall, Performance, Reservation, Ticket
-|   |-- permissions.py                # Admin-or-read-only permission
-|   |-- serializers.py                # DRF serializers for all resources
-|   |-- tests.py                      # Automated test suite
-|   |-- urls.py                       # Application router
-|   |-- views.py                      # DRF viewsets
+|-- theatre/                   # Main application
+|   |-- migrations/
+|   |   `-- 0001_initial.py    # Initial schema migration
+|   |-- admin.py
+|   |-- models.py              # Genre, Actor, Play, Hall, Performance, Reservation, Ticket
+|   |-- permissions.py         # Admin-or-read-only permission
+|   |-- serializers.py         # API serializers
+|   |-- tests.py               # Automated tests
+|   |-- urls.py                # App router
+|   |-- views.py               # Viewsets and queryset behavior
 |   `-- __init__.py
-|-- db.sqlite3                        # Default SQLite database
-|-- manage.py                         # Django management entrypoint
-|-- README.md
-|-- README_example.md
-|-- requirements.txt                  # Python dependencies
-`-- schema.yaml                       # Generated OpenAPI schema
+|-- Dockerfile
+|-- docker-compose.yml
+|-- entrypoint.sh              # Runs migrations, collectstatic, and Gunicorn
+|-- manage.py
+|-- requirements.txt
+|-- schema.yaml                # Generated OpenAPI schema
+`-- README.md
 ```
 
 ---
 
-## Database Description
+## API Endpoints
 
-The project uses SQLite by default and includes these main models:
+Base URL: `http://127.0.0.1:8000/`
 
-- **Genre**
-  - Stores play genres
-  - Contains a unique `name` field
+Main routes:
 
-- **Actor**
-  - Stores performer names
-  - Uses a unique combination of `first_name` and `last_name`
-
-- **Play**
-  - Stores theatre productions
-  - Includes `title` and `description`
-  - Has many-to-many relationships with `Actor` and `Genre`
-
-- **TheatreHall**
-  - Stores hall layout information
-  - Includes `name`, `rows`, and `seats_in_row`
-  - Exposes calculated `capacity`
-
-- **Performance**
-  - Represents a scheduled showing of a play
-  - Belongs to one `Play`
-  - Belongs to one `TheatreHall`
-  - Stores `show_time`
-
-- **Reservation**
-  - Stores a booking made by a user
-  - Belongs to one Django `User`
-  - Stores `created_at`
-
-- **Ticket**
-  - Stores a reserved seat
-  - Belongs to one `Performance`
-  - Belongs to one `Reservation`
-  - Includes `row` and `seat`
-  - Enforces unique seat booking per performance
-
-Relationships:
-- One `Play` -> many `Performance`
-- One `TheatreHall` -> many `Performance`
-- Many `Actor` -> many `Play`
-- Many `Genre` -> many `Play`
-- One `Reservation` -> many `Ticket`
-- One `Performance` -> many `Ticket`
-
----
-
-## Application Description
-
-The application is built with Django REST Framework viewsets, JWT authentication, filtering, and autogenerated API documentation.
-
-- Public features
-  - List and retrieve genres
-  - List and retrieve actors
-  - List and retrieve plays
-  - List and retrieve theatre halls
-  - List and retrieve performances
-  - Search and order supported catalog endpoints
-  - Filter performances by `play` and `theatre_hall`
-
-- Auth features
-  - Obtain JWT access and refresh tokens
-  - Refresh JWT access tokens
-
-- User features
-  - Create reservations with nested ticket payloads
-  - View only your own reservations
-  - Retrieve your own reservation details with ticket information
-
-- Admin features
-  - Create, update, and delete genres
-  - Create, update, and delete actors
-  - Create, update, and delete plays
-  - Create, update, and delete theatre halls
-  - Create, update, and delete performances
-
-- Documentation and admin
-  - Swagger UI at `/api/docs/swagger/`
-  - ReDoc at `/api/docs/redoc/`
-  - OpenAPI schema at `/api/schema/`
-  - Django admin at `/admin/`
-
-Main API routes:
 - `/api/theatre/genres/`
 - `/api/theatre/actors/`
 - `/api/theatre/plays/`
@@ -150,98 +88,14 @@ Main API routes:
 - `/api/token/`
 - `/api/token/refresh/`
 
----
+Documentation routes:
 
-## How to Run the Project
+- `/api/docs/swagger/`
+- `/api/docs/redoc/`
+- `/api/schema/`
+- `/admin/`
 
-Follow these steps to set up the project locally.
-
-### 1. Prerequisites
-
-- Python 3.12+
-- Git
-- Virtual environment tool (`venv`)
-
-### 2. Installation
-
-2.1. Clone the repository:
-
-```commandline
-git clone https://github.com/mishagitcode/theatre-api.git
-```
-
-```commandline
-cd theatre-api
-```
-
-2.2. Create a virtual environment:
-
-```commandline
-python -m venv venv
-```
-
-2.3. Activate the virtual environment
-
-Windows:
-
-```commandline
-venv\Scripts\activate
-```
-
-macOS/Linux:
-
-```commandline
-source venv/bin/activate
-```
-
-2.4. Install dependencies:
-
-```commandline
-pip install -r requirements.txt
-```
-
-2.5. Apply migrations:
-
-```commandline
-python manage.py migrate
-```
-
-2.6. Optionally load demo data:
-
-```commandline
-python manage.py loaddata theatre/fixtures/data.json
-```
-
-2.7. Optionally create a superuser for admin-only endpoints:
-
-```commandline
-python manage.py createsuperuser
-```
-
-### 3. Running the Application
-
-Start the Django development server:
-
-```bash
-python manage.py runserver
-```
-
-Open in browser:
-
-```text
-http://127.0.0.1:8000/
-```
-
-Useful URLs:
-
-```text
-http://127.0.0.1:8000/api/docs/swagger/
-http://127.0.0.1:8000/api/docs/redoc/
-http://127.0.0.1:8000/api/schema/
-http://127.0.0.1:8000/admin/
-```
-
-Example authentication flow:
+Example token request:
 
 ```http
 POST /api/token/
@@ -253,15 +107,158 @@ Content-Type: application/json
 }
 ```
 
-Use the returned access token in authenticated requests:
+Use the access token in authenticated requests:
 
 ```text
 Authorization: Bearer <access_token>
 ```
 
+---
+
+## Run with Docker
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Start the app
+
+1. Clone the repository and move into the project directory:
+
+```bash
+git clone https://github.com/mishagitcode/theatre-api.git
+cd theatre-api
+```
+
+2. Create your environment file:
+
+```bash
+cp .env.example .env
+```
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+3. Build and start the container:
+
+```bash
+docker compose up --build
+```
+
+The container startup runs migrations automatically, collects static files, and starts Gunicorn on port `8000`.
+
+Open:
+
+- `http://127.0.0.1:8000/api/docs/swagger/`
+- `http://127.0.0.1:8000/api/docs/redoc/`
+- `http://127.0.0.1:8000/api/schema/`
+- `http://127.0.0.1:8000/admin/`
+
+### Optional Docker commands
+
+Create a superuser:
+
+```bash
+docker compose exec web python manage.py createsuperuser
+```
+
 Run tests:
 
-```commandline
+```bash
+docker compose exec web python manage.py test
+```
+
+Stop the app:
+
+```bash
+docker compose down
+```
+
+If your `.env` values contain a `$` character, escape it as `$$` before running Docker Compose to avoid interpolation warnings.
+
+---
+
+## Run Locally
+
+### Prerequisites
+
+- Python 3.12+
+- `venv`
+
+### Setup
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/mishagitcode/theatre-api.git
+cd theatre-api
+```
+
+2. Create and activate a virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Windows:
+
+```powershell
+venv\Scripts\activate
+```
+
+macOS/Linux:
+
+```bash
+source venv/bin/activate
+```
+
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Create an environment file:
+
+```bash
+cp .env.example .env
+```
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+5. Apply migrations:
+
+```bash
+python manage.py migrate
+```
+
+6. Optionally create a superuser:
+
+```bash
+python manage.py createsuperuser
+```
+
+7. Start the development server:
+
+```bash
+python manage.py runserver
+```
+
+---
+
+## Testing
+
+Run the test suite locally:
+
+```bash
 python manage.py test
 ```
 
@@ -269,13 +266,15 @@ python manage.py test
 
 ## Technologies
 
-- **Python**: Core programming language
-- **Django**: Web framework
-- **Django REST Framework**: API layer
-- **Simple JWT**: JWT authentication
-- **drf-spectacular**: OpenAPI schema and docs
-- **django-filter**: Filtering support
-- **SQLite**: Default database
+- Python 3.12
+- Django 6
+- Django REST Framework
+- Simple JWT
+- drf-spectacular
+- django-filter
+- Gunicorn
+- SQLite
+- Docker and Docker Compose
 
 ---
 
