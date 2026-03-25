@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    container_name: theatre_api
+    volumes:
+      - .:/app
+      - sqlite_data:/app
+    ports:
+      - "8000:8000"
+
+volumes:
+  sqlite_data:
