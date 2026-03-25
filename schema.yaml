@@ -1,0 +1,1519 @@
+openapi: 3.0.3
+info:
+  title: Theatre API
+  version: 1.0.0
+  description: API for theatre service with plays, performances, halls, reservations
+    and tickets
+paths:
+  /api/theatre/actors/:
+    get:
+      operationId: theatre_actors_list
+      summary: List actors
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Actor'
+          description: ''
+    post:
+      operationId: theatre_actors_create
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+          description: ''
+  /api/theatre/actors/{id}/:
+    get:
+      operationId: theatre_actors_retrieve
+      summary: Retrieve actor
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this actor.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+          description: ''
+    put:
+      operationId: theatre_actors_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this actor.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+          description: ''
+    patch:
+      operationId: theatre_actors_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this actor.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedActorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedActorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedActorRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+          description: ''
+    delete:
+      operationId: theatre_actors_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this actor.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/theatre/genres/:
+    get:
+      operationId: theatre_genres_list
+      summary: List genres
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+          description: ''
+    post:
+      operationId: theatre_genres_create
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenreRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GenreRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GenreRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+          description: ''
+  /api/theatre/genres/{id}/:
+    get:
+      operationId: theatre_genres_retrieve
+      summary: Retrieve genre
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this genre.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+          description: ''
+    put:
+      operationId: theatre_genres_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this genre.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenreRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GenreRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GenreRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+          description: ''
+    patch:
+      operationId: theatre_genres_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this genre.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGenreRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGenreRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGenreRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+          description: ''
+    delete:
+      operationId: theatre_genres_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this genre.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/theatre/performances/:
+    get:
+      operationId: theatre_performances_list
+      summary: List performances
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: play
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: theatre_hall
+        schema:
+          type: integer
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PerformanceList'
+          description: ''
+    post:
+      operationId: theatre_performances_create
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerformanceCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PerformanceCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PerformanceCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceCreateUpdate'
+          description: ''
+  /api/theatre/performances/{id}/:
+    get:
+      operationId: theatre_performances_retrieve
+      summary: Retrieve performance
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this performance.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceDetail'
+          description: ''
+    put:
+      operationId: theatre_performances_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this performance.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerformanceCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PerformanceCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PerformanceCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceCreateUpdate'
+          description: ''
+    patch:
+      operationId: theatre_performances_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this performance.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPerformanceCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPerformanceCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPerformanceCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceCreateUpdate'
+          description: ''
+    delete:
+      operationId: theatre_performances_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this performance.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/theatre/plays/:
+    get:
+      operationId: theatre_plays_list
+      summary: List plays
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayList'
+          description: ''
+    post:
+      operationId: theatre_plays_create
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlayCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlayCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayCreateUpdate'
+          description: ''
+  /api/theatre/plays/{id}/:
+    get:
+      operationId: theatre_plays_retrieve
+      summary: Retrieve play
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this play.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayDetail'
+          description: ''
+    put:
+      operationId: theatre_plays_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this play.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlayCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlayCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayCreateUpdate'
+          description: ''
+    patch:
+      operationId: theatre_plays_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this play.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPlayCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPlayCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPlayCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayCreateUpdate'
+          description: ''
+    delete:
+      operationId: theatre_plays_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this play.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/theatre/reservations/:
+    get:
+      operationId: theatre_reservations_list
+      summary: List my reservations
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationList'
+          description: ''
+    post:
+      operationId: theatre_reservations_create
+      summary: Create reservation with tickets
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+  /api/theatre/reservations/{id}/:
+    get:
+      operationId: theatre_reservations_retrieve
+      summary: Retrieve my reservation
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationList'
+          description: ''
+    put:
+      operationId: theatre_reservations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+    patch:
+      operationId: theatre_reservations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReservationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReservationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReservationRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+    delete:
+      operationId: theatre_reservations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/theatre/theatre-halls/:
+    get:
+      operationId: theatre_theatre_halls_list
+      summary: List theatre halls
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TheatreHall'
+          description: ''
+    post:
+      operationId: theatre_theatre_halls_create
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TheatreHallRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TheatreHallRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TheatreHallRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TheatreHall'
+          description: ''
+  /api/theatre/theatre-halls/{id}/:
+    get:
+      operationId: theatre_theatre_halls_retrieve
+      summary: Retrieve theatre hall
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this theatre hall.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TheatreHall'
+          description: ''
+    put:
+      operationId: theatre_theatre_halls_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this theatre hall.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TheatreHallRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TheatreHallRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TheatreHallRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TheatreHall'
+          description: ''
+    patch:
+      operationId: theatre_theatre_halls_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this theatre hall.
+        required: true
+      tags:
+      - theatre
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTheatreHallRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTheatreHallRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTheatreHallRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TheatreHall'
+          description: ''
+    delete:
+      operationId: theatre_theatre_halls_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this theatre hall.
+        required: true
+      tags:
+      - theatre
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    Actor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+      required:
+      - first_name
+      - id
+      - last_name
+    ActorRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+      required:
+      - first_name
+      - last_name
+    Genre:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - id
+      - name
+    GenreRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+      required:
+      - name
+    PatchedActorRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+    PatchedGenreRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+    PatchedPerformanceCreateUpdateRequest:
+      type: object
+      properties:
+        play:
+          type: integer
+        theatre_hall:
+          type: integer
+        show_time:
+          type: string
+          format: date-time
+    PatchedPlayCreateUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          minLength: 1
+        actor_ids:
+          type: array
+          items:
+            type: integer
+        genre_ids:
+          type: array
+          items:
+            type: integer
+    PatchedReservationRequest:
+      type: object
+      properties:
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketRequest'
+    PatchedTheatreHallRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        rows:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        seats_in_row:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+    PerformanceCreateUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        play:
+          type: integer
+        theatre_hall:
+          type: integer
+        show_time:
+          type: string
+          format: date-time
+      required:
+      - id
+      - play
+      - show_time
+      - theatre_hall
+    PerformanceCreateUpdateRequest:
+      type: object
+      properties:
+        play:
+          type: integer
+        theatre_hall:
+          type: integer
+        show_time:
+          type: string
+          format: date-time
+      required:
+      - play
+      - show_time
+      - theatre_hall
+    PerformanceDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        play:
+          allOf:
+          - $ref: '#/components/schemas/PlayDetail'
+          readOnly: true
+        theatre_hall:
+          allOf:
+          - $ref: '#/components/schemas/TheatreHall'
+          readOnly: true
+        show_time:
+          type: string
+          format: date-time
+        taken_places:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - play
+      - show_time
+      - taken_places
+      - theatre_hall
+    PerformanceList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        play:
+          type: integer
+        play_title:
+          type: string
+          readOnly: true
+        theatre_hall:
+          type: integer
+        theatre_hall_name:
+          type: string
+          readOnly: true
+        theatre_hall_capacity:
+          type: integer
+          readOnly: true
+        show_time:
+          type: string
+          format: date-time
+        tickets_available:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - play
+      - play_title
+      - show_time
+      - theatre_hall
+      - theatre_hall_capacity
+      - theatre_hall_name
+      - tickets_available
+    PlayCreateUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        actor_ids:
+          type: array
+          items:
+            type: integer
+        genre_ids:
+          type: array
+          items:
+            type: integer
+      required:
+      - actor_ids
+      - description
+      - genre_ids
+      - id
+      - title
+    PlayCreateUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          minLength: 1
+        actor_ids:
+          type: array
+          items:
+            type: integer
+        genre_ids:
+          type: array
+          items:
+            type: integer
+      required:
+      - actor_ids
+      - description
+      - genre_ids
+      - title
+    PlayDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        actors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Actor'
+          readOnly: true
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+          readOnly: true
+      required:
+      - actors
+      - description
+      - genres
+      - id
+      - title
+    PlayList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+      required:
+      - description
+      - id
+      - title
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ticket'
+      required:
+      - created_at
+      - id
+      - tickets
+    ReservationList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketList'
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - tickets
+    ReservationRequest:
+      type: object
+      properties:
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketRequest'
+      required:
+      - tickets
+    TheatreHall:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        rows:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        seats_in_row:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        capacity:
+          type: integer
+          readOnly: true
+      required:
+      - capacity
+      - id
+      - name
+      - rows
+      - seats_in_row
+    TheatreHallRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        rows:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        seats_in_row:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+      required:
+      - name
+      - rows
+      - seats_in_row
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        row:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        seat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        performance:
+          type: integer
+      required:
+      - id
+      - performance
+      - row
+      - seat
+    TicketList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        row:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        seat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        performance:
+          allOf:
+          - $ref: '#/components/schemas/PerformanceList'
+          readOnly: true
+      required:
+      - id
+      - performance
+      - row
+      - seat
+    TicketRequest:
+      type: object
+      properties:
+        row:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        seat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        performance:
+          type: integer
+      required:
+      - performance
+      - row
+      - seat
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
